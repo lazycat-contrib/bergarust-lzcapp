@@ -1,0 +1,38 @@
+lzc-sdk-version: "0.1"
+name: BergaRust
+package: cloud.lazycat.app.bergarust
+version: 0.1.0
+description: 一个轻量级的、自托管的多语言翻译服务。
+homepage: https://github.com/Aalivexy/translation-service
+usage: "请在浏览器打开应用，通过程序域名+/help获取使用帮助"
+author: aalivexy
+application:
+    subdomain: bergarust
+    background_task: true
+    multi_instance: false
+    gpu_accel: false
+    kvm_accel: false
+    usb_accel: false
+    handlers:
+        error_page_templates:
+            404: /lzcapp/pkg/content/errors/404.html.tpl
+    public_path:
+        - /
+    routes:
+        - /=http://translation-service:3000/
+        - /help=file:///lzcapp/pkg/content/
+services:
+    translation-service:
+        image: docker.cnb.cool/aalivexy/translation-service:latest
+        binds:
+            - /lzcapp/var/config:/app/config
+            - /lzcapp/var/models:/app/models
+        environment:
+            - MODELS_DIR=/app/models
+        setup_script: |
+            if [ ! -d /app/models/enzh ];then
+              cp -r /lzcapp/pkg/content/models/enzh /app/models/
+            fi
+            if [ ! -d /app/models/zhen ];then
+              cp -r /lzcapp/pkg/content/models/zhen /app/models/
+            fi

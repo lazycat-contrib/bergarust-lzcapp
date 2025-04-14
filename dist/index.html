@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>BergaRust 使用说明</title>
+        <style>
+            /* Reset 样式 */
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+            }
+            body,
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6,
+            p,
+            ul,
+            ol,
+            li,
+            pre,
+            code,
+            table,
+            th,
+            td {
+                margin: 0;
+                padding: 0;
+            }
+            body {
+                font-family:
+                    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                    "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
+                    "Segoe UI Emoji", "Segoe UI Symbol";
+                line-height: 1.7;
+                color: #333;
+                background-color: #f9f9f9;
+                padding: 20px;
+                word-wrap: break-word;
+            }
+            h1 {
+                font-size: 2.5em;
+                font-weight: 600;
+                margin-bottom: 30px;
+                color: #222;
+            }
+            h2 {
+                font-size: 1.8em;
+                font-weight: 600;
+                margin-top: 40px;
+                margin-bottom: 20px;
+                color: #222;
+            }
+            h3 {
+                font-size: 1.4em;
+                font-weight: 600;
+                margin-top: 30px;
+                margin-bottom: 15px;
+                color: #333;
+            }
+            p {
+                font-size: 1em;
+                margin-bottom: 15px;
+                color: #444;
+            }
+            code {
+                font-family:
+                    Menlo, Monaco, Consolas, "Courier New", monospace;
+                background-color: #f0f0f0;
+                padding: 4px 8px;
+                border-radius: 5px;
+                font-size: 0.9em;
+                color: #333;
+            }
+            pre {
+                font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+                background-color: #f0f0f0;
+                padding: 15px;
+                border-radius: 8px;
+                overflow-x: auto;
+                margin-bottom: 20px;
+                line-height: 1.5;
+                font-size: 0.9em;
+                color: #333;
+            }
+            ul,
+            ol {
+                margin-left: 25px;
+                margin-bottom: 15px;
+            }
+            li {
+                margin-bottom: 8px;
+                font-size: 1em;
+                color: #444;
+            }
+            ul {
+                list-style-type: disc;
+            }
+            ol {
+                list-style-type: decimal;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 30px;
+                border-spacing: 0;
+            }
+            th,
+            td {
+                padding: 12px 15px;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+            }
+            th {
+                background-color: #f2f2f2;
+                font-weight: 500;
+                color: #333;
+            }
+            tr:last-child td {
+                border-bottom: none;
+            }
+            a {
+                color: #007bff;
+                text-decoration: none;
+                font-weight: 500;
+            }
+            a:hover {
+                text-decoration: underline;
+            }
+            .dynamic-url {
+                font-weight: 600;
+                color: #007bff;
+            }
+            .container {
+                max-width: 960px;
+                margin: 0 auto;
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+            .badge {
+                display: inline-block;
+                padding: 0.25em 0.4em;
+                font-size: 75%;
+                font-weight: 700;
+                line-height: 1;
+                text-align: center;
+                white-space: nowrap;
+                vertical-align: baseline;
+                border-radius: 0.25rem;
+                margin-right: 0.5rem;
+            }
+            .badge-blue {
+                color: #fff;
+                background-color: #007bff;
+            }
+            .badge-green {
+                color: #fff;
+                background-color: #28a745;
+            }
+
+            @media (max-width: 768px) {
+                body {
+                    padding: 15px;
+                }
+                h1 {
+                    font-size: 2em;
+                    margin-bottom: 20px;
+                }
+                h2 {
+                    font-size: 1.6em;
+                    margin-top: 30px;
+                    margin-bottom: 15px;
+                }
+                h3 {
+                    font-size: 1.2em;
+                    margin-top: 25px;
+                    margin-bottom: 10px;
+                }
+                p,
+                li,
+                code,
+                pre,
+                th,
+                td,
+                a {
+                    font-size: 0.95em;
+                }
+                pre,
+                code {
+                    padding: 10px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>BergaRust 翻译服务</h1>
+
+            <p>
+                <span class="badge badge-blue">Rust</span>
+                <span class="badge badge-green">Bergamot</span>
+                一个基于 Rust 和 Bergamot 翻译引擎的轻量级多语言翻译服务，兼容多种翻译前端 API。
+            </p>
+
+            <p>
+                当前服务器地址：
+                <span id="current-url" class="dynamic-url"></span>
+            </p>
+
+            <h2>API 接口说明</h2>
+            <p>已经默认集成中文-英文 英文-中文模型，如果需要更多模型，请到<a href="https://github.com/mozilla/firefox-translations-models/">Github</a>下载模型。</p>
+            
+            <h3>模型目录结构</h3>
+            <pre><code>models/
+├── enzh/  # 语言对目录
+│   ├── model.intgemm8.bin
+│   ├── model.s2t.bin
+│   ├── srcvocab.spm
+│   └── trgvocab.spm
+└── zhen/  # 反向语言对
+    └── ...</code></pre>
+
+            <h3>翻译插件接口</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>插件</th>
+                        <th>API 端点</th>
+                        <th>认证方式</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>沉浸式翻译</td>
+                        <td><code class="api-url">/imme</code></td>
+                        <td>URL 参数或 Authorization 头</td>
+                    </tr>
+                    <tr>
+                        <td>简约翻译</td>
+                        <td><code class="api-url">/kiss</code></td>
+                        <td>URL 参数或 Authorization 头</td>
+                    </tr>
+                    <tr>
+                        <td>划词翻译</td>
+                        <td><code class="api-url">/hcfy</code></td>
+                        <td>URL 参数或 Authorization 头</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>开发者 API</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>端点</th>
+                        <th>方法</th>
+                        <th>描述</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>/translate</code></td>
+                        <td>POST</td>
+                        <td>基础翻译接口</td>
+                    </tr>
+                    <tr>
+                        <td><code>/detect</code></td>
+                        <td>POST</td>
+                        <td>语言检测接口，用于检测文本的语言类型</td>
+                    </tr>
+            
+                    <tr>
+                        <td><code>/health</code></td>
+                        <td>GET</td>
+                        <td>健康检查</td>
+                    </tr>
+                </tbody>
+            </table>
+            <h3>项目资源</h3>
+            <ul>
+                <li><a href="https://github.com/aalivexy/translation-service">GitHub 仓库</a></li>
+                <li><a href="https://github.com/mozilla/firefox-translations-models/">翻译模型</a></li>
+                <li><a href="https://github.com/browsermt/bergamot-translator">Bergamot 引擎</a></li>
+            </ul>
+        </div>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const currentUrlSpan = document.getElementById("current-url");
+                const apiUrlCodes = document.querySelectorAll(".api-url");
+
+                if (currentUrlSpan) {
+                    currentUrlSpan.textContent = window.location.origin;
+                    apiUrlCodes.forEach((codeElement) => {
+                        codeElement.textContent =
+                            codeElement.textContent.replace(
+                                "http://localhost:3000",
+                                window.location.origin,
+                            );
+                    });
+                }
+            });
+        </script>
+    </body>
+</html>
