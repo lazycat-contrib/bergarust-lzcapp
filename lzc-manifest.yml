@@ -1,5 +1,4 @@
 usage: "请在浏览器打开应用，通过程序域名+/help获取使用帮助"
-
 application:
   subdomain: bergarust
   background_task: true
@@ -14,11 +13,10 @@ application:
       backend: http://translation-service:3000/
     - location: /help
       backend: file:///lzcapp/pkg/content/
-
 services:
   translation-service:
-    # upstream: ghcr.io/aalivexy/translation-service:main
-    image: ghcr.io/aalivexy/translation-service:main
+    # upstream: ghcr.io/aalivexy/translation-service:main@sha256:59bf3fde0adc58958e0ce2a9fd9c222fd3042b929f1f05ca376bc6474e2e2c3f
+    image: registry.lazycat.cloud/czyt/aalivexy/translation-service:c9d281c2d3b82f2b
     binds:
       - /lzcapp/var/config:/app/config
       - /lzcapp/var/models:/app/models
