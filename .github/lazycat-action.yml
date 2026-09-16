@@ -1,0 +1,41 @@
+version: 1
+
+project:
+  root: .
+  build_config: lzc-build.yml
+  package_file: package.yml
+  output: .lazycat-build/bergarust.lpk
+  target_arch: amd64
+
+update:
+  strategy: publish
+  allow_downgrade: false
+  version_source:
+    type: image
+    image: translation-service
+    bump: patch
+
+build:
+  run_buildscript: false
+
+images:
+  - id: translation-service
+    target: service
+    service: translation-service
+    source: ghcr.io/aalivexy/translation-service
+    channel: custom
+    sort: created
+    tag_regex: '^main$'
+    delivery:
+      mode: lazycat
+
+stores:
+  official:
+    enabled: true
+    skip_if_version_exists: true
+    changelog_locales: [zh, en]
+  private:
+    enabled: true
+    skip_if_version_exists: true
+    name: BergaRust
+    summary: "一个轻量级的、自托管的多语言翻译服务。"

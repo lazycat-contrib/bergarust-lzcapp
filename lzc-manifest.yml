@@ -1,0 +1,33 @@
+usage: "请在浏览器打开应用，通过程序域名+/help获取使用帮助"
+
+application:
+  subdomain: bergarust
+  background_task: true
+  multi_instance: false
+  handlers:
+    error_page_templates:
+      404: /lzcapp/pkg/content/errors/404.html.tpl
+  public_path:
+    - /
+  upstreams:
+    - location: /
+      backend: http://translation-service:3000/
+    - location: /help
+      backend: file:///lzcapp/pkg/content/
+
+services:
+  translation-service:
+    # upstream: ghcr.io/aalivexy/translation-service:main
+    image: ghcr.io/aalivexy/translation-service:main
+    binds:
+      - /lzcapp/var/config:/app/config
+      - /lzcapp/var/models:/app/models
+    environment:
+      - MODELS_DIR=/app/models
+    setup_script: |
+      if [ ! -d /app/models/enzh ];then
+        cp -r /lzcapp/pkg/content/models/enzh /app/models/
+      fi
+      if [ ! -d /app/models/zhen ];then
+        cp -r /lzcapp/pkg/content/models/zhen /app/models/
+      fi
